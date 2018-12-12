@@ -11,6 +11,7 @@ import kitchen.services.KitchenInventoryService;
 import kitchen.services.ProductService;
 import org.apache.log4j.Logger;
 import org.apache.log4j.LogManager;
+import org.elasticsearch.ElasticsearchException;
 
 import java.nio.channels.ClosedChannelException;
 
@@ -43,6 +44,12 @@ public class Bootstrap {
             res.status(400);
             logger.error(e.getMessage(), e);
             res.body(toJson(e.getMessage()));
+        });
+
+        exception(ElasticsearchException.class, (e, req, res) -> {
+            res.status(400);
+            logger.error(e.getDetailedMessage(), e);
+            res.body(toJson(e.getDetailedMessage()));
         });
 
         notFound((req, res) -> {

@@ -71,9 +71,16 @@ public class KitchenInventoryService {
         return kitchenInventoryList;
     }
 
-    private static void updateCounter(int postSequence, MongoCollection<Document> collectionToUpdate) {
+    static void updateCounter(int postSequence, MongoCollection<Document> collectionToUpdate) {
 
         collectionToUpdate.updateOne(eq("_id", "inventory"), new Document("$set", new Document("sequence_value", postSequence)));
+
+        logger.debug("Counter updated to " + postSequence);
+    }
+
+    static void updateCounter(long postSequence, MongoCollection<Document> collectionToUpdate, String id) {
+
+        collectionToUpdate.updateOne(eq("_id", id), new Document("$set", new Document("sequence_value", postSequence)));
 
         logger.debug("Counter updated to " + postSequence);
     }

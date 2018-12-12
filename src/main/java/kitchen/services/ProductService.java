@@ -4,6 +4,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import kitchen.controllers.ProductController;
 import kitchen.errors.ResponseError;
+import kitchen.elasticsearch.ElasticSearchClient;
 import kitchen.models.Product;
 import kitchen.mongo.KitchenInventoryMongoClient;
 import kitchen.resources.ProductResource;
@@ -11,15 +12,17 @@ import kitchen.utils.JsonUtil;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.bson.Document;
+import org.elasticsearch.ElasticsearchException;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.*;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
+
+import static kitchen.services.KitchenInventoryService.updateCounter;
 
 public class ProductService {
     final private static Logger logger = LogManager.getLogger(ProductController.class.getName());
-    private static Queue<UUID> getQueue = new LinkedList<>();
 
     public ProductService() {
 
@@ -74,10 +77,32 @@ public class ProductService {
             return product;
 
         } catch (Exception e) {
-//            KitchenInventoryMongoClient.closeMongoConnection(uuid);
             throw new ResponseError(e);
         }
 
+    }
 
+    public ProductResource create(ProductResource productResource) throws UnknownHostException, ElasticsearchException {
+        UUID uuid1 = UUID.randomUUID();
+        UUID uuid2 = UUID.randomUUID();
+
+        MongoCollection<Document> collection = KitchenInventoryMongoClient.getCollection("products", uuid1);
+        MongoCollection<Document> counter = KitchenInventoryMongoClient.getCollection("counters", uuid2);
+        Document productSequence = KitchenInventoryMongoClient.findOne("_id", "products", counter);
+
+        long id  = productSequence.getLong("sequence_value");
+        productResource.setNDB_Number(id);
+
+        collection.insertOne(KitchenInventoryMongoClient.toDocument(productResource));
+
+        logger.debug("Created product successfully");
+
+        updateCounter(id + 1, counter, "products");
+        KitchenInventoryMongoClient.closeMongoConnection(uuid1);
+        KitchenInventoryMongoClient.closeMongoConnection(uuid2);
+
+        ElasticSearchClient.insertIndex(productResource, Long.toString(productResource.getNDB_Number()));
+
+        return productResource;
     }
 }

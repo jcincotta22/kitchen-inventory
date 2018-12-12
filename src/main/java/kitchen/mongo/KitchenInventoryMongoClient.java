@@ -6,6 +6,8 @@ import com.mongodb.client.MongoDatabase;
 import kitchen.models.KitchenInventory;
 import kitchen.models.Product;
 import kitchen.models.Spice;
+import kitchen.resources.ProductResource;
+import kitchen.services.ProductRequestBody;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.bson.Document;
@@ -45,7 +47,7 @@ public class KitchenInventoryMongoClient {
         }
     }
 
-    public static Document toDocument(Product product) {
+    public static Document toDocument(ProductResource product) {
         return new Document()
                 .append("long_name", product.getLong_name())
                 .append("NDB_Number", product.getNDB_Number())

@@ -25,6 +25,11 @@ public class Product {
         this.ingredients_english = ingredients_english;
     }
 
+    public Product(String long_name, String manufacturer){
+        this.long_name = long_name;
+        this.manufacturer = manufacturer;
+    }
+
     public ObjectId get_id() {
         return _id;
     }
