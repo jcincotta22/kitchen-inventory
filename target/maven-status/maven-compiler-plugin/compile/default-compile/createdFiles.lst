@@ -1,0 +1,14 @@
+kitchen/services/ProductService.class
+kitchen/resources/KitchenInventoryResource.class
+kitchen/models/KitchenInventory.class
+kitchen/models/Product.class
+kitchen/mongo/KitchenInventoryMongoClient.class
+kitchen/services/KitchenInventoryRequestBody.class
+kitchen/errors/ResponseError.class
+kitchen/controllers/ProductController.class
+kitchen/services/KitchenInventoryService.class
+kitchen/Bootstrap.class
+kitchen/models/Spice.class
+kitchen/controllers/KitchenController.class
+kitchen/utils/JsonUtil.class
+kitchen/resources/ProductResource.class
