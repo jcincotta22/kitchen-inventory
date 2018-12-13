@@ -3,12 +3,16 @@
 /Users/jcincotta/zipcar/kitchen-inventory/src/main/java/kitchen/models/Product.java
 /Users/jcincotta/zipcar/kitchen-inventory/src/main/java/kitchen/models/KitchenInventory.java
 /Users/jcincotta/zipcar/kitchen-inventory/src/main/java/kitchen/controllers/KitchenController.java
+/Users/jcincotta/zipcar/kitchen-inventory/src/main/java/kitchen/services/ProductRequestBody.java
 /Users/jcincotta/zipcar/kitchen-inventory/src/main/java/kitchen/services/ProductService.java
 /Users/jcincotta/zipcar/kitchen-inventory/src/main/java/kitchen/utils/JsonUtil.java
 /Users/jcincotta/zipcar/kitchen-inventory/src/main/java/kitchen/errors/ResponseError.java
 /Users/jcincotta/zipcar/kitchen-inventory/src/main/java/kitchen/resources/KitchenInventoryResource.java
 /Users/jcincotta/zipcar/kitchen-inventory/src/main/java/kitchen/services/KitchenInventoryRequestBody.java
+/Users/jcincotta/zipcar/kitchen-inventory/src/main/java/kitchen/elasticsearch/ElasticSearchClient.java
+/Users/jcincotta/zipcar/kitchen-inventory/src/main/java/kitchen/utils/ListUtils.java
 /Users/jcincotta/zipcar/kitchen-inventory/src/main/java/kitchen/services/KitchenInventoryService.java
 /Users/jcincotta/zipcar/kitchen-inventory/src/main/java/kitchen/models/Spice.java
+/Users/jcincotta/zipcar/kitchen-inventory/src/main/java/kitchen/services/Person.java
 /Users/jcincotta/zipcar/kitchen-inventory/src/main/java/kitchen/Bootstrap.java
 /Users/jcincotta/zipcar/kitchen-inventory/src/main/java/kitchen/mongo/KitchenInventoryMongoClient.java

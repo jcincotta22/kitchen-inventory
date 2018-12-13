@@ -8,6 +8,7 @@ import kitchen.elasticsearch.ElasticSearchClient;
 import kitchen.models.Product;
 import kitchen.mongo.KitchenInventoryMongoClient;
 import kitchen.resources.ProductResource;
+import kitchen.resources.SearchResource;
 import kitchen.utils.JsonUtil;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -41,7 +42,7 @@ public class ProductService {
 
         List<ProductResource> productList = new ArrayList<>();
 
-        try (MongoCursor<Document> cursor = productCollection.find(criteria).iterator()) {
+        try (MongoCursor cursor = productCollection.find(criteria).iterator()) {
             while (cursor.hasNext()) {
                 Product product = JsonUtil.jsonToObject(JsonUtil.toJson(cursor.next()), Product.class);
 
@@ -50,6 +51,14 @@ public class ProductService {
         }
         logger.debug("Returning search results");
         KitchenInventoryMongoClient.closeMongoConnection(uuid);
+        return productList;
+
+    }
+
+    public List<Product> search(SearchResource searchResource) throws UnknownHostException {
+        logger.debug("Searching with search string: " + searchResource.getValue());
+        List<Product> productList = ElasticSearchClient.searchByField(Product.class, searchResource.getField(), searchResource.getValue());
+        logger.debug("Returning search results");
         return productList;
 
     }
@@ -104,5 +113,25 @@ public class ProductService {
         ElasticSearchClient.insertIndex(productResource, Long.toString(productResource.getNDB_Number()));
 
         return productResource;
+    }
+
+    public List<Product> findAll() throws UnknownHostException {
+        UUID uuid = UUID.randomUUID();
+        MongoCollection productCollection = KitchenInventoryMongoClient.getCollection("products", uuid);
+
+        List<Product> productList = new ArrayList<>();
+
+        try (MongoCursor cursor = productCollection.find().iterator()) {
+            while (cursor.hasNext()) {
+                Product document = JsonUtil.jsonToObject(JsonUtil.toJson(cursor.next()), Product.class);
+                productList.add(document);
+            }
+        } catch ( NumberFormatException e) {
+            logger.error(e.getMessage(), e);
+
+        }
+
+        KitchenInventoryMongoClient.closeMongoConnection(uuid);
+        return productList;
     }
 }

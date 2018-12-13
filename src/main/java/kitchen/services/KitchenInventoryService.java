@@ -60,7 +60,7 @@ public class KitchenInventoryService {
 
         List<KitchenInventory> kitchenInventoryList = new ArrayList<>();
 
-        try (MongoCursor<Document> cursor = kitchenInventoryCollection.find().iterator()) {
+        try (MongoCursor cursor = kitchenInventoryCollection.find().iterator()) {
             while (cursor.hasNext()) {
                 KitchenInventory document = JsonUtil.jsonToObject(JsonUtil.toJson(cursor.next()), KitchenInventory.class);
                 kitchenInventoryList.add(document);

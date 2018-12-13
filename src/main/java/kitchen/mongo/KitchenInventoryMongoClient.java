@@ -23,7 +23,7 @@ public class KitchenInventoryMongoClient {
     private static Map<UUID, MongoClient> connectionMap = new HashMap<>();
     final private static Logger logger = LogManager.getLogger(KitchenInventoryMongoClient.class.getName());
 
-    private static void connect(UUID uuid) throws UnknownHostException {
+    private static synchronized void connect(UUID uuid) throws UnknownHostException {
         MongoClient conn = new MongoClient(new MongoClientURI("mongodb://localhost:27017"));
         connectionMap.put(uuid, conn);
         logger.warn("connecting to mongo");
@@ -40,7 +40,7 @@ public class KitchenInventoryMongoClient {
                 .append("spice_list", documentList);
     }
 
-    public static void closeMongoConnection(UUID uuid) {
+    public static synchronized void closeMongoConnection(UUID uuid) {
         if(connectionMap.containsKey(uuid)) {
             connectionMap.get(uuid).close();
             connectionMap.remove(uuid);

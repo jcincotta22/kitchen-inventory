@@ -1,16 +1,23 @@
 package kitchen.controllers;
 
+import kitchen.elasticsearch.ElasticSearchClient;
 import kitchen.errors.ResponseError;
 import kitchen.models.Product;
 import kitchen.resources.ProductResource;
+import kitchen.resources.SearchResource;
 import kitchen.services.ProductRequestBody;
 import kitchen.services.ProductService;
 import kitchen.utils.JsonUtil;
+import kitchen.utils.ListUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.elasticsearch.ElasticsearchException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ForkJoinTask;
 
 import static kitchen.utils.JsonUtil.json;
 import static spark.Spark.get;
@@ -45,6 +52,60 @@ public class ProductController {
                 return productService.create(product);
 
             } catch (IOException e) {
+                throw new ResponseError(e);
+            }
+        }, json());
+
+        post("/product/search", (req, res) -> {
+            System.out.println("search endpoint");
+            try {
+                String body = req.body();
+                logger.debug("creating new product");
+
+                SearchResource searchResource = JsonUtil.jsonToObject(body, SearchResource.class);
+
+                return productService.search(searchResource);
+
+            } catch (IOException e) {
+                throw new ResponseError(e);
+            }
+        }, json());
+
+        get("/products/es", (req, res) -> {
+            try {
+
+                int chunks = 3;
+                List<Product> productList = productService.findAll();
+
+                List<Product>[] partitions = ListUtils.partition(productList, productList.size() / chunks);
+
+                List<Thread> threadList = new ArrayList<>();
+
+
+                for(List<Product> partition : partitions) {
+                    Thread thread = new Thread() {
+                        public void run() {
+                            for(Product product : partition) {
+                                ElasticSearchClient.insertIndex(product, Long.toString(product.getNDB_Number()));
+                            }
+                            logger.debug("Thread done");
+                        }
+                    };
+                    threadList.add(thread);
+                }
+
+                for(Thread t : threadList) {
+                    t.start();
+                }
+
+                for(Thread t : threadList) {
+                    t.join();
+                    logger.debug("All treads completed");
+                }
+
+                return "Success";
+
+            } catch (ElasticsearchException e) {
                 throw new ResponseError(e);
             }
         }, json());
