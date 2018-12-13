@@ -71,7 +71,7 @@ public class ProductController {
             }
         }, json());
 
-        get("/products/es", (req, res) -> {
+        post("/products/es", (req, res) -> {
             try {
 
                 int chunks = 3;
@@ -98,12 +98,15 @@ public class ProductController {
                     t.start();
                 }
 
-                for(Thread t : threadList) {
-                    t.join();
-                    logger.debug("All treads completed");
-                }
 
-                return "Success";
+//                for(Thread t : threadList) {
+//                    t.join();
+//                }
+
+                logger.debug("Syncing elasticsearch");
+
+
+                return "Syncing elasticsearch";
 
             } catch (ElasticsearchException e) {
                 throw new ResponseError(e);
