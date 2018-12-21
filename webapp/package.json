@@ -1,5 +1,5 @@
 {
-  "name": "Kitchen Inventory",
+  "name": "kitchen_inventory",
   "version": "1.0.0",
   "description": "Kitchen Inventory",
   "scripts": {
@@ -46,7 +46,7 @@
     "html-webpack-plugin": "^2.29.0",
     "husky": "^0.14.3",
     "jest": "^21.1.0",
-    "lint-staged": "^4.0.1",
+    "lint-staged": "^7.0.5",
     "preload-webpack-plugin": "^1.2.2",
     "prettier": "^1.5.2",
     "react-test-renderer": "^16.0.0",
@@ -55,6 +55,7 @@
     "webpack-dev-server": "^2.5.1"
   },
   "dependencies": {
+    "cosmiconfig": "^5.0.7",
     "emotion": "^7.3.2",
     "lodash": "^4.17.4",
     "offline-plugin": "^4.8.3",

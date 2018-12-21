@@ -1,6 +1,6 @@
 {
-  "name": "redux-react-starter",
-  "short_name": "React",
+  "name": "kitchen_inventory",
+  "short_name": "kitchen_inventory",
   "lang": "fr",
   "start_url": "/",
   "display": "standalone",
