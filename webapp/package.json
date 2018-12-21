@@ -1,7 +1,7 @@
 {
-  "name": "redux-react-starter",
-  "version": "1.2.0",
-  "description": "Get started with ES2015, React and Redux. Including Webpack, ESLint, react-router, fetch ...",
+  "name": "Kitchen Inventory",
+  "version": "1.0.0",
+  "description": "Kitchen Inventory",
   "scripts": {
     "start": "webpack-dev-server --open --config webpack/webpack.config.dev.js",
     "build": "rm -rf dist && webpack --config webpack/webpack.config.prod.js  && cp -a assets/ dist/",
@@ -9,23 +9,25 @@
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
     "ngrok": "ngrok http -region eu 8080",
-    "test": "jest"
+    "test": "jest",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write --single-quote --trailing-comma all",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/didierfranc/redux-react-starter.git"
+    "url": "git+https://github.com/jcincotta22/kitchen-inventory.git"
   },
   "keywords": [
     "react",
     "redux",
     "async"
   ],
-  "author": "Didier Franc",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/didierfranc/redux-react-starter/issues"
-  },
-  "homepage": "https://github.com/didierfranc/redux-react-starter#readme",
+  "author": "Jeff Cincotta",
   "devDependencies": {
     "babel-core": "^6.25.0",
     "babel-eslint": "^7.2.3",
