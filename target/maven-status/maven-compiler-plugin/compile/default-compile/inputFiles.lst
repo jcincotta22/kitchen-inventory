@@ -10,6 +10,7 @@
 /Users/jcincotta/zipcar/kitchen-inventory/src/main/java/kitchen/resources/KitchenInventoryResource.java
 /Users/jcincotta/zipcar/kitchen-inventory/src/main/java/kitchen/services/KitchenInventoryRequestBody.java
 /Users/jcincotta/zipcar/kitchen-inventory/src/main/java/kitchen/elasticsearch/ElasticSearchClient.java
+/Users/jcincotta/zipcar/kitchen-inventory/src/main/java/kitchen/resources/SearchResource.java
 /Users/jcincotta/zipcar/kitchen-inventory/src/main/java/kitchen/utils/ListUtils.java
 /Users/jcincotta/zipcar/kitchen-inventory/src/main/java/kitchen/services/KitchenInventoryService.java
 /Users/jcincotta/zipcar/kitchen-inventory/src/main/java/kitchen/models/Spice.java

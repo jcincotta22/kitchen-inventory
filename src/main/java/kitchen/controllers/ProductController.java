@@ -8,16 +8,13 @@ import kitchen.resources.SearchResource;
 import kitchen.services.ProductRequestBody;
 import kitchen.services.ProductService;
 import kitchen.utils.JsonUtil;
-import kitchen.utils.ListUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.elasticsearch.ElasticsearchException;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.ForkJoinTask;
 
 import static kitchen.utils.JsonUtil.json;
 import static spark.Spark.get;
@@ -74,34 +71,15 @@ public class ProductController {
         post("/products/es", (req, res) -> {
             try {
 
-                int chunks = 3;
                 List<Product> productList = productService.findAll();
 
-                List<Product>[] partitions = ListUtils.partition(productList, productList.size() / chunks);
+                ForkJoinPool forkJoinPool = new ForkJoinPool(12);
 
-                List<Thread> threadList = new ArrayList<>();
-
-
-                for(List<Product> partition : partitions) {
-                    Thread thread = new Thread() {
-                        public void run() {
-                            for(Product product : partition) {
-                                ElasticSearchClient.insertIndex(product, Long.toString(product.getNDB_Number()));
-                            }
-                            logger.debug("Thread done");
-                        }
-                    };
-                    threadList.add(thread);
-                }
-
-                for(Thread t : threadList) {
-                    t.start();
-                }
-
-
-//                for(Thread t : threadList) {
-//                    t.join();
-//                }
+                forkJoinPool.submit(() -> {
+                    productList.parallelStream().forEach(product -> {
+                        ElasticSearchClient.insertIndex(product, Long.toString(product.getNDB_Number()));
+                    });
+                });
 
                 logger.debug("Syncing elasticsearch");
 
