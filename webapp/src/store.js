@@ -11,21 +11,17 @@ import rootSaga from './sagas/index';
 
 const sagaMiddleware = createSagaMiddleware();
 
-
-const middleware = [
-  thunk,
-  sagaMiddleware,
-];
+const middleware = [thunk, sagaMiddleware];
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-
 if (process.env.NODE_ENV !== 'production') {
-  middleware.push(createLogger({
-    collapsed: true,
-  }));
+  middleware.push(
+    createLogger({
+      collapsed: true,
+    }),
+  );
 }
-
 
 export const store = createStore(
   rootReducer,
